@@ -1,0 +1,152 @@
+================================================================================
+Link with on target delete allow
+================================================================================
+
+module default {
+    type Post {
+        link author: User {
+            on target delete allow;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete))))))))
+
+================================================================================
+Link with on target delete restrict
+================================================================================
+
+module default {
+    type Post {
+        link author: User {
+            on target delete restrict;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete))))))))
+
+================================================================================
+Link with on target delete delete
+================================================================================
+
+module default {
+    type Post {
+        link author: User {
+            on target delete delete;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete))))))))
+
+================================================================================
+Multi link with on target delete
+================================================================================
+
+module default {
+    type Post {
+        multi categories: Category {
+            on target delete allow;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete))))))))
+
+================================================================================
+Abstract link
+================================================================================
+
+module default {
+    abstract link author_base {}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (property
+        (modifier)
+        (identifier)
+        (declarations)))))
+
+================================================================================
+Abstract link extending
+================================================================================
+
+module default {
+    abstract link author_base extending link_base {}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (abstract_link
+        (identifier)
+        (extending
+          (type
+            (identifier)))
+        (declarations)))))

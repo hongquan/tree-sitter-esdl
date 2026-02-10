@@ -174,11 +174,7 @@ module default {
             (identifier)
             (expression
               (expression
-                (binary_expression
-                  (expression
-                    (identifier))
-                  (expression
-                    (identifier)))))))))))
+                (edgeql_fragment)))))))))
 
 ==================
 Property with declarations

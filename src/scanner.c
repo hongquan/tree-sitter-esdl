@@ -18,7 +18,16 @@ static bool scan_edgeql_chars(TSLexer *lexer) {
   lexer->result_symbol = EDGEQL_CHARS;
   int nest_count = 0;
   
-  for (bool has_content;; has_content = true) {
+  // Check for raw string pattern r' or r"
+  if (lexer->lookahead == 'r') {
+    advance(lexer);
+    if (lexer->lookahead == '\'' || lexer->lookahead == '"') {
+      return false;  // Let the raw_string rule match instead
+    }
+    // Not a raw string, continue matching
+  }
+  
+  for (bool has_content = false;; has_content = true) {
     lexer->mark_end(lexer);
     switch (lexer->lookahead) {
       case '(':

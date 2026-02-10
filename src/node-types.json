@@ -1,5 +1,74 @@
 [
   {
+    "type": "abstract_link",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "extending",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "access_policy",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "access_policy_action",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "access_policy_action",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "accessor",
     "named": true,
     "fields": {},
@@ -301,6 +370,10 @@
       "required": false,
       "types": [
         {
+          "type": "access_policy",
+          "named": true
+        },
+        {
           "type": "annotation",
           "named": true
         },
@@ -317,7 +390,19 @@
           "named": true
         },
         {
+          "type": "on_target_delete",
+          "named": true
+        },
+        {
           "type": "property",
+          "named": true
+        },
+        {
+          "type": "rewrite",
+          "named": true
+        },
+        {
+          "type": "trigger",
           "named": true
         }
       ]
@@ -395,6 +480,10 @@
         },
         {
           "type": "number",
+          "named": true
+        },
+        {
+          "type": "raw_string",
           "named": true
         },
         {
@@ -513,6 +602,36 @@
     }
   },
   {
+    "type": "global_def",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "index",
     "named": true,
     "fields": {},
@@ -616,6 +735,11 @@
     }
   },
   {
+    "type": "on_target_delete",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "property",
     "named": true,
     "fields": {
@@ -669,6 +793,21 @@
     }
   },
   {
+    "type": "rewrite",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "scalar_type_def",
     "named": true,
     "fields": {
@@ -711,6 +850,14 @@
       "required": false,
       "types": [
         {
+          "type": "abstract_link",
+          "named": true
+        },
+        {
+          "type": "access_policy",
+          "named": true
+        },
+        {
           "type": "alias",
           "named": true
         },
@@ -727,6 +874,10 @@
           "named": true
         },
         {
+          "type": "global_def",
+          "named": true
+        },
+        {
           "type": "module",
           "named": true
         },
@@ -740,6 +891,10 @@
         },
         {
           "type": "scalar_type_def",
+          "named": true
+        },
+        {
+          "type": "trigger",
           "named": true
         }
       ]
@@ -786,6 +941,36 @@
         },
         {
           "type": "string_fragment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trigger",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "modifier",
           "named": true
         }
       ]
@@ -988,11 +1173,63 @@
     "named": false
   },
   {
+    "type": "access",
+    "named": false
+  },
+  {
+    "type": "after",
+    "named": false
+  },
+  {
     "type": "alias",
     "named": false
   },
   {
+    "type": "all",
+    "named": false
+  },
+  {
+    "type": "allow",
+    "named": false
+  },
+  {
     "type": "annotation",
+    "named": false
+  },
+  {
+    "type": "anycontiguous",
+    "named": false
+  },
+  {
+    "type": "anydiscrete",
+    "named": false
+  },
+  {
+    "type": "anyenum",
+    "named": false
+  },
+  {
+    "type": "anyfloat",
+    "named": false
+  },
+  {
+    "type": "anyint",
+    "named": false
+  },
+  {
+    "type": "anynumeric",
+    "named": false
+  },
+  {
+    "type": "anypoint",
+    "named": false
+  },
+  {
+    "type": "anyreal",
+    "named": false
+  },
+  {
+    "type": "anyscalar",
     "named": false
   },
   {
@@ -1001,6 +1238,10 @@
   },
   {
     "type": "array",
+    "named": false
+  },
+  {
+    "type": "before",
     "named": false
   },
   {
@@ -1040,6 +1281,10 @@
     "named": false
   },
   {
+    "type": "date_duration",
+    "named": false
+  },
+  {
     "type": "datetime",
     "named": false
   },
@@ -1048,12 +1293,40 @@
     "named": false
   },
   {
+    "type": "deferred",
+    "named": false
+  },
+  {
+    "type": "delegated",
+    "named": false
+  },
+  {
+    "type": "delete",
+    "named": false
+  },
+  {
+    "type": "deny",
+    "named": false
+  },
+  {
+    "type": "do",
+    "named": false
+  },
+  {
     "type": "duration",
+    "named": false
+  },
+  {
+    "type": "each",
     "named": false
   },
   {
     "type": "edgeql_fragment",
     "named": true
+  },
+  {
+    "type": "empty",
+    "named": false
   },
   {
     "type": "enum",
@@ -1088,6 +1361,10 @@
     "named": false
   },
   {
+    "type": "for",
+    "named": false
+  },
+  {
     "type": "function",
     "named": false
   },
@@ -1105,6 +1382,10 @@
   },
   {
     "type": "inheritable",
+    "named": false
+  },
+  {
+    "type": "insert",
     "named": false
   },
   {
@@ -1129,6 +1410,18 @@
   },
   {
     "type": "link",
+    "named": false
+  },
+  {
+    "type": "local_date",
+    "named": false
+  },
+  {
+    "type": "local_datetime",
+    "named": false
+  },
+  {
+    "type": "local_time",
     "named": false
   },
   {
@@ -1160,7 +1453,23 @@
     "named": false
   },
   {
+    "type": "policy",
+    "named": false
+  },
+  {
     "type": "property",
+    "named": false
+  },
+  {
+    "type": "raw_string",
+    "named": true
+  },
+  {
+    "type": "read",
+    "named": false
+  },
+  {
+    "type": "relative_duration",
     "named": false
   },
   {
@@ -1168,11 +1477,27 @@
     "named": false
   },
   {
+    "type": "restrict",
+    "named": false
+  },
+  {
+    "type": "rewrite",
+    "named": false
+  },
+  {
     "type": "scalar",
     "named": false
   },
   {
+    "type": "select",
+    "named": false
+  },
+  {
     "type": "sequence",
+    "named": false
+  },
+  {
+    "type": "set",
     "named": false
   },
   {
@@ -1192,6 +1517,14 @@
     "named": true
   },
   {
+    "type": "target",
+    "named": false
+  },
+  {
+    "type": "trigger",
+    "named": false
+  },
+  {
     "type": "true",
     "named": true
   },
@@ -1204,11 +1537,19 @@
     "named": false
   },
   {
+    "type": "update",
+    "named": false
+  },
+  {
     "type": "using",
     "named": false
   },
   {
     "type": "uuid",
+    "named": false
+  },
+  {
+    "type": "write",
     "named": false
   },
   {

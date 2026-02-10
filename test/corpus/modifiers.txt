@@ -1,0 +1,232 @@
+================================================================================
+Required property
+================================================================================
+
+module default {
+    type User {
+        required username: str;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type)))))))
+
+================================================================================
+Optional property
+================================================================================
+
+module default {
+    type User {
+        optional nickname: str;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type)))))))
+
+================================================================================
+Readonly property
+================================================================================
+
+module default {
+    type User {
+        old_id: int16 {
+            readonly := true;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true))))))))))
+
+================================================================================
+Property with default value
+================================================================================
+
+module default {
+    type User {
+        is_active: bool {
+            default := true;
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true))))))))))
+
+================================================================================
+Multi link
+================================================================================
+
+module default {
+    type Post {
+        multi categories: Category;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type
+              (identifier))))))))
+
+================================================================================
+Single link
+================================================================================
+
+module default {
+    type Post {
+        single author: User;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type
+              (identifier))))))))
+
+================================================================================
+Link keyword
+================================================================================
+
+module default {
+    type Post {
+        link author: User;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type
+              (identifier))))))))
+
+================================================================================
+Multi link with keyword
+================================================================================
+
+module default {
+    type Post {
+        multi link tags: Tag;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type
+              (identifier))))))))
+
+================================================================================
+Multiple modifiers combined
+================================================================================
+
+module default {
+    type Post {
+        required multi tags: Tag;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (modifier)
+            (identifier)
+            (type
+              (identifier))))))))

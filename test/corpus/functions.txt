@@ -16,7 +16,8 @@ module default {
       (function
         (identifier)
         (argspec
-          (identifier))
+          (expression
+            (edgeql_fragment)))
         (returnspec
           (type))
         (using

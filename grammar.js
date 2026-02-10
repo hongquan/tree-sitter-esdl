@@ -37,6 +37,11 @@ module.exports = grammar({
     ['declaration', 'literal'],
     // [$.primary_expression, $.statement_block, 'object'],
   ],
+  
+  conflicts: $ => [
+    [$.trigger, $.expression],
+    [$.modifier, $.abstract_link],
+  ],
 
   rules: {
     source_file: $ => repeat(choice(
@@ -58,6 +63,10 @@ module.exports = grammar({
         repeat(choice(
           $.object_type,
           $.scalar_type_def,
+          $.global_def,
+          $.abstract_link,
+          $.access_policy,
+          $.trigger,
           $.property,
           $.annotation,
           $.constraint,
@@ -85,6 +94,10 @@ module.exports = grammar({
           $.annotation,
           $.constraint,
           $.index,
+          $.rewrite,
+          $.on_target_delete,
+          $.access_policy,
+          $.trigger,
           seq($.extending, ';'),
         ),
       ),
@@ -152,6 +165,60 @@ module.exports = grammar({
         $.annotation,
       ))),
       ';'
+    ),
+    
+    rewrite: $ => seq(
+      'rewrite',
+      delim(choice('insert', 'update')),
+      'using',
+      choice(
+        parens($.expression),
+        seq('(', $.expression, ')'),
+      ),
+      optional(';'),
+    ),
+    
+    on_target_delete: $ => seq(
+      'on', 'target', 'delete', 
+      choice('restrict', 'delete', 'allow', 'deferred', 'set', 'empty'),
+      ';',
+    ),
+    
+    access_policy: $ => seq(
+      optional($.modifier),
+      'access', 'policy',
+      field('name', $.identifier),
+      repeat($.access_policy_action),
+      optional(seq('using', $.expression)),
+      ';',
+    ),
+    
+    access_policy_action: $ => seq(
+      choice('allow', 'deny'),
+      choice(
+        'all',
+        'select',
+        'insert',
+        'update',
+        'delete',
+        seq('update', 'read'),
+        seq('update', 'write'),
+      ),
+    ),
+    
+    trigger: $ => seq(
+      optional($.modifier),
+      'trigger',
+      field('name', $.identifier),
+      choice('after', 'before'),
+      choice('insert', 'update', 'delete'),
+      'for', 'each',
+      'do',
+      choice(
+        $.expression,
+        seq('(', $.expression, ')'),
+      ),
+      ';',
     ),
     
     alias: $ => seq(
@@ -238,17 +305,34 @@ module.exports = grammar({
     modifier: $ => choice(
       'abstract',
       'overloaded',
-      'global',
+      'delegated',
       choice('required', 'optional'),
       choice('single', 'multi'),
       'inheritable',
+    ),
+    
+    global_def: $ => seq(
+      'global',
+      field('name', $.identifier),
+      choice(
+        seq(':', $.type, optional(seq(':=', $.expression)), ';'),
+        seq(':=', $.expression, ';'),
+      ),
+    ),
+    
+    abstract_link: $ => seq(
+      'abstract',
+      'link',
+      field('name', $.identifier),
+      optional($.extending),
+      $.declarations,
     ),
 
     argspec: $ => seq(
       '(',
       optional(delim(choice(
+        seq($.identifier, ':', $._scalar_type),
         $.expression, // value instead (or as well?)
-        seq($.identifier, ':', $._scalar_type)
       ))),
       ')',
     ),
@@ -260,6 +344,7 @@ module.exports = grammar({
 
     // TODO: This should be proper expression parsing.
     expression: $ => choice(
+      $.raw_string,
       $.string,
       $.number,
       $.true,
@@ -332,6 +417,14 @@ module.exports = grammar({
       ),
     ),
     
+    raw_string: $ => token(seq(
+      'r',
+      choice(
+        seq("'", /[^'\\]*/, "'"),
+        seq('"', /[^"\\]*/, '"'),
+      ),
+    )),
+    
     // TODO: Proper edgeql language injection
     edgeql: $ => parens(optional(choice(
       $.expression,
@@ -340,6 +433,9 @@ module.exports = grammar({
     unescaped_single_string_fragment: $ =>
       token.immediate(prec(1, /[^'\\]+/)),
     
+    unescaped_double_string_fragment: $ =>
+      token.immediate(prec(1, /[^"\\]+/)),
+    
     escape_sequence: $ => token.immediate(seq(
       '\\',
       choice(
@@ -347,7 +443,7 @@ module.exports = grammar({
         /[0-7]{1,3}/,
         /x[0-9a-fA-F]{2}/,
         /u[0-9a-fA-F]{4}/,
-        /u{[0-9a-fA-F]+}/
+        /u\{[0-9a-fA-F]+\}/
       )
     )),
     
@@ -366,12 +462,26 @@ module.exports = grammar({
       'bytes',
       'datetime',
       'duration',
+      'date_duration',
+      'relative_duration',
       'cal::local_datetime',
       'cal::local_date',
       'cal::local_time',
       'cal::relative_duration',
+      'local_datetime',
+      'local_date',
+      'local_time',
       'sequence',
       'anytype',
+      'anyscalar',
+      'anyreal',
+      'anyfloat',
+      'anyint',
+      'anynumeric',
+      'anyenum',
+      'anydiscrete',
+      'anycontiguous',
+      'anypoint',
     ),
     
     array: $ => seq(

@@ -23,7 +23,7 @@ module default {
             (identifier)
             (argspec
               (expression
-                (number)))))))))
+                (edgeql_fragment)))))))))
 
 ==================
 Enum declaration

@@ -1,0 +1,178 @@
+================================================================================
+Rewrite insert
+================================================================================
+
+module default {
+    type Post {
+        required title: str;
+        created_at: datetime {
+            rewrite insert using (datetime_of_statement());
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (rewrite
+                (expression
+                  (edgeql_fragment))))))))))
+
+================================================================================
+Rewrite update
+================================================================================
+
+module default {
+    type Post {
+        required title: str;
+        updated_at: datetime {
+            rewrite update using (datetime_of_statement());
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (rewrite
+                (expression
+                  (edgeql_fragment))))))))))
+
+================================================================================
+Rewrite insert, update
+================================================================================
+
+module default {
+    type Post {
+        required title: str;
+        updated_at: datetime {
+            rewrite insert, update using (datetime_of_statement());
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (rewrite
+                (expression
+                  (edgeql_fragment))))))))))
+
+================================================================================
+Rewrite with conditional expression
+================================================================================
+
+module default {
+    type Post {
+        is_published: bool;
+        published_at: datetime {
+            rewrite update using (
+                datetime_of_statement() if __specified__.is_published and .is_published else __old__.published_at
+            );
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (rewrite
+                (expression
+                  (edgeql_fragment))))))))))
+
+================================================================================
+Rewrite with __subject__
+================================================================================
+
+module default {
+    type Category {
+        featured_order: int16 {
+            default := 1;
+            constraint min_value(1);
+            rewrite insert, update using (
+                <int16>{} if __subject__.featured_order ?= <int16>{} or __subject__.featured_order < 1 else __subject__.featured_order
+            );
+        }
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (number)))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (rewrite
+                (expression
+                  (edgeql_fragment))))))))))

@@ -1,0 +1,128 @@
+================================================================================
+Simple index
+================================================================================
+
+module default {
+    type User {
+        required username: str;
+        index on (.username);
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))
+
+================================================================================
+Index with str_lower
+================================================================================
+
+module default {
+    type User {
+        required username: str;
+        index on (str_lower(.username));
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))
+
+================================================================================
+Multiple indexes
+================================================================================
+
+module default {
+    type User {
+        required username: str;
+        required email: str;
+        index on (str_lower(.username));
+        index on (str_lower(.email));
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (index
+            (on
+              (expression
+                (edgeql_fragment))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))
+
+================================================================================
+Index with except
+================================================================================
+
+module default {
+    type User {
+        required username: str;
+        index on (.username) except (<bool>{});
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))
+            (except
+              (expression
+                (edgeql_fragment)))))))))

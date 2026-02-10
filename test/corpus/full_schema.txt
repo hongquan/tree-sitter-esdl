@@ -1,0 +1,543 @@
+================================================================================
+Full schema with User type
+================================================================================
+
+module default {
+    scalar type DocFormat extending enum<Md, Rst>;
+
+    type User {
+        required username: str {
+            constraint exclusive;
+        }
+        required password: str {
+            constraint max_len_value(100);
+        }
+        first_name: str {
+            constraint max_len_value(40);
+        }
+        last_name: str {
+            constraint max_len_value(40);
+        }
+        required email: str {
+            constraint exclusive;
+            constraint max_len_value(200);
+        }
+        is_active: bool {
+            default := true;
+        }
+        is_superuser: bool {
+            default := false;
+        }
+        old_id: int16 {
+            readonly := true;
+            constraint exclusive;
+        }
+        index on (str_lower(.username));
+        index on (str_lower(.email));
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (scalar_type_def
+        (identifier)
+        (extending
+          (enum
+            (identifier)
+            (identifier))))
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier))))
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (false)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true)))
+              (constraint
+                (identifier))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))
+
+================================================================================
+Full schema with BlogCategory
+================================================================================
+
+module default {
+    type BlogCategory {
+        required title: str {
+            constraint max_len_value(50);
+        }
+        title_vi: str {
+            constraint max_len_value(50);
+        }
+        required slug: str {
+            constraint exclusive;
+            constraint max_len_value(50);
+        }
+        header_color: str {
+            constraint max_len_value(20);
+            constraint regexp(r'^(#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})|)?$');
+            default := '';
+        }
+        featured_order: int16 {
+            default := 1;
+            constraint min_value(1);
+            rewrite insert, update using (
+                <int16>{} if __subject__.featured_order ?= <int16>{} or __subject__.featured_order < 1 else __subject__.featured_order
+            );
+        }
+        summary_en: str {
+            constraint max_len_value(500);
+            default := '';
+        }
+        summary_vi: str {
+            constraint max_len_value(500);
+            default := '';
+        }
+        old_id: int16 {
+            readonly := true;
+            constraint exclusive;
+        }
+        index on (str_lower(.slug));
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (raw_string))))
+              (property
+                (identifier)
+                (expression
+                  (string)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (number)))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (rewrite
+                (expression
+                  (edgeql_fragment)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (property
+                (identifier)
+                (expression
+                  (string)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (property
+                (identifier)
+                (expression
+                  (string)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true)))
+              (constraint
+                (identifier))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))
+
+================================================================================
+Full schema with BlogPost and links
+================================================================================
+
+module default {
+    scalar type DocFormat extending enum<Md, Rst>;
+
+    type BlogPost {
+        required title: str {
+            constraint max_len_value(200);
+        }
+        required slug: str {
+            constraint exclusive;
+            constraint max_len_value(200);
+        }
+        body: str;
+        format: DocFormat {
+            default := DocFormat.Md;
+        }
+        locale: str {
+            constraint max_len_value(6);
+        }
+        excerpt: str;
+        html: str;
+        is_published: bool {
+            default := false;
+        }
+        published_at: datetime {
+            rewrite update using (datetime_of_statement() if __specified__.is_published and .is_published else __old__.published_at);
+        }
+        link author: User {
+            on target delete allow;
+        }
+        multi categories: BlogCategory {
+            on target delete allow;
+        }
+        seo_description: str {
+            constraint max_len_value(400);
+        }
+        multi seo_keywords: str {
+            constraint max_len_value(40);
+        }
+        og_image: str {
+            constraint max_len_value(200);
+        }
+        highlighted_order: int16 {
+            default := 1;
+            constraint min_value(1);
+            rewrite insert, update using (
+                <int16>{} if __subject__.highlighted_order ?= <int16>{} or __subject__.highlighted_order < 1 else __subject__.highlighted_order
+            );
+        }
+        created_at: datetime {
+            default := datetime_current();
+        }
+        updated_at: datetime {
+            default := datetime_current();
+            rewrite update using (
+                datetime_of_statement()
+                if not __specified__.updated_at
+                else .updated_at
+            );
+        }
+        old_id: int16 {
+            readonly := true;
+            constraint exclusive;
+        }
+        index on (str_lower(.slug));
+        index on (str_lower(.title));
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (scalar_type_def
+        (identifier)
+        (extending
+          (enum
+            (identifier)
+            (identifier))))
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (identifier)
+                  (identifier)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (false)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (rewrite
+                (expression
+                  (edgeql_fragment)))))
+          (property
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete)))
+          (property
+            (modifier)
+            (identifier)
+            (type
+              (identifier))
+            (declarations
+              (on_target_delete)))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (modifier)
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (number)))
+              (constraint
+                (identifier)
+                (argspec
+                  (expression
+                    (edgeql_fragment))))
+              (rewrite
+                (expression
+                  (edgeql_fragment)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (fncall
+                    (identifier))))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (fncall
+                    (identifier))))
+              (rewrite
+                (expression
+                  (edgeql_fragment)))))
+          (property
+            (identifier)
+            (type)
+            (declarations
+              (property
+                (identifier)
+                (expression
+                  (true)))
+              (constraint
+                (identifier))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment))))
+          (index
+            (on
+              (expression
+                (edgeql_fragment)))))))))

@@ -1,2 +1,7 @@
+*.so
+*.a
+*.pc
 node_modules/
 build/
+
+*.aider.*
